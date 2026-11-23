@@ -4,12 +4,16 @@ import { PageHeader } from "@/components/PageHeader";
 import { MacroBar } from "@/components/MacroBar";
 import { DeleteMemberButton } from "@/components/DeleteMemberButton";
 import { Disclaimer } from "@/components/Disclaimer";
-import { getMember } from "@/lib/data";
+import { getMember, getWorkoutDays } from "@/lib/data";
+import { leanMassKg } from "@/lib/calc/body";
+import type { WorkoutDay } from "@/lib/supabase/types";
 import { computeEnergy } from "@/lib/calc/energy";
 import { generateTrainingPlan } from "@/lib/calc/training";
 import { memberToInput } from "@/lib/calc/adapt";
 import {
   BALANCE_LABELS,
+  DAY_LABELS,
+  WORKOUT_KIND_LABELS,
   GOAL_LABELS,
   NEAT_LABELS,
   PHASE_DESC,
@@ -23,8 +27,12 @@ export const dynamic = "force-dynamic";
 const PHASES: Phase[] = ["phase1", "phase2", "phase3"];
 
 export default async function MemberDetail({ params }: { params: { id: string } }) {
-  const member = await getMember(params.id);
+  const [member, workoutDays] = await Promise.all([
+    getMember(params.id),
+    getWorkoutDays(params.id),
+  ]);
   if (!member) notFound();
+  const bodyFat = member.body_fat_pct == null ? null : Number(member.body_fat_pct);
 
   const input = memberToInput(member);
   const e = computeEnergy(input);
@@ -46,6 +54,8 @@ export default async function MemberDetail({ params }: { params: { id: string } 
         <p className="text-sm text-stone-500">
           {member.age} años · {SEX_LABELS[member.sex]} · {Number(member.weight_kg)} kg ·{" "}
           {Number(member.height_cm)} cm
+          {bodyFat != null &&
+            ` · ${bodyFat}% grasa · ${leanMassKg(Number(member.weight_kg), bodyFat)} kg magra`}
         </p>
         <p className="mt-1 text-sm text-stone-500">
           NEAT: {NEAT_LABELS[member.neat_level]}
@@ -77,11 +87,30 @@ export default async function MemberDetail({ params }: { params: { id: string } 
         </div>
       </div>
 
+      {/* Accesos */}
+      <div className="mb-3 grid grid-cols-3 gap-2 text-center">
+        <Link href={`/log?member=${member.id}`} className="card p-3">
+          <p className="text-xl">📒</p>
+          <p className="mt-1 text-xs font-medium">Diario</p>
+        </Link>
+        <Link href={`/members/${member.id}/body`} className="card p-3">
+          <p className="text-xl">⚖️</p>
+          <p className="mt-1 text-xs font-medium">Composición</p>
+        </Link>
+        <Link href={`/members/${member.id}/routine`} className="card p-3">
+          <p className="text-xl">🏋️</p>
+          <p className="mt-1 text-xs font-medium">Rutina</p>
+        </Link>
+      </div>
+
       {/* Cálculo energético */}
       <div className="card mb-3">
         <h2 className="mb-2 text-sm font-semibold text-stone-700">Cálculo energético</h2>
         <dl className="divide-y divide-stone-100 text-sm">
-          <Row label="BMR (Mifflin-St Jeor)" value={`${e.bmr} kcal`} />
+          <Row
+            label={e.bmrFormula === "katch" ? "BMR (Katch-McArdle, masa magra)" : "BMR (Mifflin-St Jeor)"}
+            value={`${e.bmr} kcal`}
+          />
           <Row label="Factor de actividad" value={`× ${e.activityFactor}`} />
           <Row label="TDEE (mantenimiento)" value={`${e.tdee} kcal`} />
           <Row
@@ -141,8 +170,12 @@ export default async function MemberDetail({ params }: { params: { id: string } 
         </div>
       </div>
 
-      {/* Rutina de gimnasio */}
-      {member.wants_gym && (
+      {/* Rutina: personalizada si existe, si no la plantilla */}
+      {workoutDays.length > 0 ? (
+        <div className="card mb-3">
+          <CustomRoutine memberId={member.id} days={workoutDays} />
+        </div>
+      ) : member.wants_gym && (
         <div className="card mb-3">
           <TrainingSection
             plan={generateTrainingPlan(member.active_phase, member.goal)}
@@ -209,6 +242,29 @@ function TrainingSection({
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+
+function CustomRoutine({ memberId, days }: { memberId: string; days: WorkoutDay[] }) {
+  return (
+    <div>
+      <div className="mb-2 flex items-center justify-between">
+        <h2 className="text-sm font-semibold text-stone-700">🏋️ Mi rutina</h2>
+        <Link href={`/members/${memberId}/routine`} className="text-xs text-brand-600">
+          Editar
+        </Link>
+      </div>
+      <ul className="space-y-1 text-sm">
+        {days.map((d) => (
+          <li key={d.id} className="flex justify-between gap-2">
+            <span className="text-stone-500">{DAY_LABELS[d.day_of_week]}</span>
+            <span className="text-right font-medium text-stone-700">
+              {d.kind === "rest" ? "Descanso" : d.title || WORKOUT_KIND_LABELS[d.kind]}
+            </span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

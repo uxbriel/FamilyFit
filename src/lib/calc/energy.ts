@@ -12,6 +12,7 @@ import type {
   NeatLevel,
   Phase,
 } from "./types";
+import { katchMcArdleBMR, leanMassKg } from "./body";
 
 /** Factor de actividad base según el nivel NEAT (vida cotidiana). */
 const NEAT_FACTORS: Record<NeatLevel, number> = {
@@ -126,7 +127,10 @@ function proteinTargetPerKg(phase: Phase, goal: Goal): number {
 
 /** Cálculo energético completo de un miembro. */
 export function computeEnergy(member: MemberInput): EnergyResult {
-  const bmr = calcBMR(member);
+  const hasBodyFat = member.bodyFatPct != null && member.bodyFatPct > 0;
+  const bmr = hasBodyFat
+    ? katchMcArdleBMR(leanMassKg(member.weightKg, member.bodyFatPct as number))
+    : calcBMR(member);
   const activityFactor = calcActivityFactor(member.neatLevel, member.sportFreqPerWeek);
   const tdee = calcTDEE(bmr, activityFactor);
   const calorieAdjustment = calcCalorieAdjustment(member.activePhase, member.goal);
@@ -135,6 +139,7 @@ export function computeEnergy(member: MemberInput): EnergyResult {
 
   return {
     bmr,
+    bmrFormula: hasBodyFat ? "katch" : "mifflin",
     activityFactor,
     tdee,
     calorieAdjustment,

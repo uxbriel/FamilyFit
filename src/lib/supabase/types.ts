@@ -29,6 +29,9 @@ export interface Member {
   wants_gym: boolean;
   goal: Goal;
   active_phase: Phase;
+  body_fat_pct: number | null;
+  target_weight_kg: number | null;
+  target_body_fat_pct: number | null;
   created_at: string;
   updated_at: string;
 }
@@ -44,6 +47,8 @@ export interface Ingredient {
   protein_per_100g: number;
   carbs_per_100g: number;
   fat_per_100g: number;
+  serving_label: string | null;
+  serving_grams: number | null;
   is_seed: boolean;
   created_at: string;
   updated_at: string;
@@ -80,4 +85,56 @@ export interface MealPlanEntry {
   day_of_week: number;
   meal_type: MealType;
   dish_id: string;
+}
+
+export type WorkoutKind = "strength" | "cardio" | "rest";
+export type FoodLogKind = "dish" | "ingredient" | "custom";
+
+export interface BodyMeasurement {
+  id: string;
+  family_id: string;
+  member_id: string;
+  measured_on: string;
+  weight_kg: number;
+  body_fat_pct: number | null;
+  muscle_mass_kg: number | null;
+  visceral_fat: number | null;
+  notes: string | null;
+  created_at: string;
+}
+
+export interface WorkoutExerciseRow {
+  name: string;
+  sets: number;
+  reps: string;
+}
+
+export interface WorkoutDay {
+  id: string;
+  family_id: string;
+  member_id: string;
+  day_of_week: number;
+  kind: WorkoutKind;
+  title: string;
+  notes: string | null;
+  exercises: WorkoutExerciseRow[];
+  updated_at: string;
+}
+
+export interface FoodLog {
+  id: string;
+  family_id: string;
+  member_id: string;
+  logged_on: string;
+  meal_type: MealType;
+  kind: FoodLogKind;
+  dish_id: string | null;
+  ingredient_id: string | null;
+  quantity: number | null;
+  name: string;
+  kcal: number;
+  protein_g: number;
+  carbs_g: number;
+  fat_g: number;
+  created_at: string;
 }

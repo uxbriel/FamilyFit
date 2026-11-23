@@ -15,6 +15,8 @@ function parseIngredient(formData: FormData) {
     protein_per_100g: Number(formData.get("protein_per_100g") ?? 0),
     carbs_per_100g: Number(formData.get("carbs_per_100g") ?? 0),
     fat_per_100g: Number(formData.get("fat_per_100g") ?? 0),
+    serving_label: String(formData.get("serving_label") ?? "").trim() || null,
+    serving_grams: Number(formData.get("serving_grams")) > 0 ? Number(formData.get("serving_grams")) : null,
   };
 }
 

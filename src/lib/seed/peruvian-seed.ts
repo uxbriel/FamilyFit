@@ -24,6 +24,9 @@ export interface SeedIngredient {
   proteinPer100g: number;
   carbsPer100g: number;
   fatPer100g: number;
+  /** Porción de referencia para registrar rápido (1 scoop, 1 cda, 1 huevo). */
+  servingLabel?: string;
+  servingGrams?: number;
 }
 
 export interface SeedDishLine {
@@ -52,11 +55,31 @@ export const SEED_INGREDIENTS: SeedIngredient[] = [
   { slug: "aceite", name: "Aceite vegetal", purchaseUnit: "litro", referencePrice: 8.0, gramsPerUnit: 920, kcalPer100g: 884, proteinPer100g: 0, carbsPer100g: 0, fatPer100g: 100 },
   { slug: "ajo", name: "Ajo", purchaseUnit: "kg", referencePrice: 12.0, gramsPerUnit: 1000, kcalPer100g: 149, proteinPer100g: 6, carbsPer100g: 33, fatPer100g: 0.5 },
   { slug: "culantro", name: "Culantro", purchaseUnit: "atado", referencePrice: 1.0, gramsPerUnit: 50, kcalPer100g: 23, proteinPer100g: 2, carbsPer100g: 4, fatPer100g: 0.5 },
-  { slug: "pan", name: "Pan francés", purchaseUnit: "unidad", referencePrice: 0.3, gramsPerUnit: 30, kcalPer100g: 290, proteinPer100g: 9, carbsPer100g: 56, fatPer100g: 2 },
+  { slug: "pan", name: "Pan francés", purchaseUnit: "unidad", referencePrice: 0.3, gramsPerUnit: 30, kcalPer100g: 290, proteinPer100g: 9, carbsPer100g: 56, fatPer100g: 2, servingLabel: "1 pan", servingGrams: 30 },
   { slug: "leche_evaporada", name: "Leche evaporada", purchaseUnit: "lata", referencePrice: 3.8, gramsPerUnit: 410, kcalPer100g: 135, proteinPer100g: 6.8, carbsPer100g: 10, fatPer100g: 7.6 },
-  { slug: "huevo", name: "Huevo", purchaseUnit: "unidad", referencePrice: 0.5, gramsPerUnit: 50, kcalPer100g: 155, proteinPer100g: 13, carbsPer100g: 1.1, fatPer100g: 11 },
+  { slug: "huevo", name: "Huevo", purchaseUnit: "unidad", referencePrice: 0.5, gramsPerUnit: 50, kcalPer100g: 155, proteinPer100g: 13, carbsPer100g: 1.1, fatPer100g: 11, servingLabel: "1 huevo", servingGrams: 50 },
   { slug: "sillao", name: "Sillao (salsa de soya)", purchaseUnit: "botella", referencePrice: 5.0, gramsPerUnit: 500, kcalPer100g: 60, proteinPer100g: 8, carbsPer100g: 6, fatPer100g: 0 },
   { slug: "vinagre", name: "Vinagre", purchaseUnit: "botella", referencePrice: 3.0, gramsPerUnit: 500, kcalPer100g: 20, proteinPer100g: 0, carbsPer100g: 0.9, fatPer100g: 0 },
+
+  // ---- Fitness: proteínas magras, carbohidratos limpios y grasas buenas ----
+  { slug: "tilapia", name: "Filete de tilapia", purchaseUnit: "kg", referencePrice: 69.9, gramsPerUnit: 1000, kcalPer100g: 96, proteinPer100g: 20, carbsPer100g: 0, fatPer100g: 1.7, servingLabel: "1 filete", servingGrams: 150 },
+  { slug: "atun_agua", name: "Atún en agua (lata)", purchaseUnit: "lata", referencePrice: 6.0, gramsPerUnit: 140, kcalPer100g: 84, proteinPer100g: 19, carbsPer100g: 0, fatPer100g: 0.8, servingLabel: "1 lata", servingGrams: 140 },
+  { slug: "yogurt_griego", name: "Yogurt griego natural sin azúcar", purchaseUnit: "pote", referencePrice: 19.2, gramsPerUnit: 850, kcalPer100g: 60, proteinPer100g: 10, carbsPer100g: 4, fatPer100g: 0.4, servingLabel: "1 taza", servingGrams: 150 },
+  { slug: "camote", name: "Camote", purchaseUnit: "kg", referencePrice: 3.8, gramsPerUnit: 1000, kcalPer100g: 86, proteinPer100g: 1.6, carbsPer100g: 20, fatPer100g: 0.1 },
+  { slug: "pan_integral", name: "Pan de molde integral", purchaseUnit: "bolsa", referencePrice: 8.9, gramsPerUnit: 620, kcalPer100g: 250, proteinPer100g: 10, carbsPer100g: 43, fatPer100g: 4, servingLabel: "1 tajada", servingGrams: 30 },
+  { slug: "platano", name: "Plátano de seda", purchaseUnit: "kg", referencePrice: 3.9, gramsPerUnit: 1000, kcalPer100g: 89, proteinPer100g: 1.1, carbsPer100g: 23, fatPer100g: 0.3, servingLabel: "1 plátano", servingGrams: 120 },
+  { slug: "papaya", name: "Papaya", purchaseUnit: "kg", referencePrice: 6.0, gramsPerUnit: 1000, kcalPer100g: 43, proteinPer100g: 0.5, carbsPer100g: 11, fatPer100g: 0.3, servingLabel: "1 plato", servingGrams: 200 },
+  { slug: "brocoli", name: "Brócoli", purchaseUnit: "kg", referencePrice: 8.5, gramsPerUnit: 1000, kcalPer100g: 34, proteinPer100g: 2.8, carbsPer100g: 7, fatPer100g: 0.4 },
+  { slug: "espinaca", name: "Espinaca", purchaseUnit: "bolsa", referencePrice: 7.2, gramsPerUnit: 400, kcalPer100g: 23, proteinPer100g: 2.9, carbsPer100g: 3.6, fatPer100g: 0.4 },
+  { slug: "pepino", name: "Pepino", purchaseUnit: "kg", referencePrice: 5.0, gramsPerUnit: 1000, kcalPer100g: 15, proteinPer100g: 0.7, carbsPer100g: 3.6, fatPer100g: 0.1 },
+  { slug: "limon", name: "Limón", purchaseUnit: "kg", referencePrice: 5.0, gramsPerUnit: 1000, kcalPer100g: 29, proteinPer100g: 1.1, carbsPer100g: 9, fatPer100g: 0.3 },
+  { slug: "palta", name: "Palta", purchaseUnit: "kg", referencePrice: 17.0, gramsPerUnit: 1000, kcalPer100g: 160, proteinPer100g: 2, carbsPer100g: 9, fatPer100g: 15, servingLabel: "1/4 palta", servingGrams: 50 },
+  { slug: "almendras", name: "Almendras", purchaseUnit: "kg", referencePrice: 90.0, gramsPerUnit: 1000, kcalPer100g: 579, proteinPer100g: 21, carbsPer100g: 22, fatPer100g: 50, servingLabel: "15 almendras", servingGrams: 18 },
+  { slug: "aceite_oliva", name: "Aceite de oliva extra virgen", purchaseUnit: "litro", referencePrice: 70.0, gramsPerUnit: 920, kcalPer100g: 884, proteinPer100g: 0, carbsPer100g: 0, fatPer100g: 100, servingLabel: "1 cdta", servingGrams: 5 },
+  // ---- Suplementos (valores de etiqueta; ajusta a tu marca) ----
+  { slug: "whey", name: "Proteína whey isolate (Iso Triple Zero)", purchaseUnit: "pote", referencePrice: 180.0, gramsPerUnit: 907, kcalPer100g: 370, proteinPer100g: 83, carbsPer100g: 3, fatPer100g: 0.5, servingLabel: "1 scoop", servingGrams: 30 },
+  { slug: "creatina", name: "Creatina monohidratada", purchaseUnit: "pote", referencePrice: 90.0, gramsPerUnit: 300, kcalPer100g: 0, proteinPer100g: 0, carbsPer100g: 0, fatPer100g: 0, servingLabel: "1 dosis (5 g)", servingGrams: 5 },
+  { slug: "mantequilla_mani", name: "Mantequilla de maní (choc. blanco)", purchaseUnit: "pote", referencePrice: 45.0, gramsPerUnit: 600, kcalPer100g: 557, proteinPer100g: 17, carbsPer100g: 33, fatPer100g: 43, servingLabel: "1 cda", servingGrams: 15 },
 ];
 
 export const SEED_DISHES: SeedDish[] = [
@@ -116,6 +139,68 @@ export const SEED_DISHES: SeedDish[] = [
       { ingredientSlug: "sillao", gramsPerBaseServing: 10 },
       { ingredientSlug: "vinagre", gramsPerBaseServing: 5 },
       { ingredientSlug: "arroz", gramsPerBaseServing: 120 },
+    ],
+  },
+  {
+    name: "Desayuno proteico con palta",
+    mealType: "breakfast",
+    description: "Huevos revueltos con espinaca, pan integral con palta y papaya.",
+    lines: [
+      { ingredientSlug: "huevo", gramsPerBaseServing: 150 },
+      { ingredientSlug: "espinaca", gramsPerBaseServing: 40 },
+      { ingredientSlug: "tomate", gramsPerBaseServing: 50 },
+      { ingredientSlug: "pan_integral", gramsPerBaseServing: 30 },
+      { ingredientSlug: "palta", gramsPerBaseServing: 50 },
+      { ingredientSlug: "papaya", gramsPerBaseServing: 150 },
+    ],
+  },
+  {
+    name: "Tostadas con mantequilla de maní y batido",
+    mealType: "breakfast",
+    description: "Pan integral con mantequilla de maní y plátano, 2 huevos y batido de whey.",
+    lines: [
+      { ingredientSlug: "pan_integral", gramsPerBaseServing: 60 },
+      { ingredientSlug: "mantequilla_mani", gramsPerBaseServing: 15 },
+      { ingredientSlug: "platano", gramsPerBaseServing: 60 },
+      { ingredientSlug: "huevo", gramsPerBaseServing: 100 },
+      { ingredientSlug: "whey", gramsPerBaseServing: 30 },
+    ],
+  },
+  {
+    name: "Tilapia con camote y ensalada",
+    mealType: "dinner",
+    description: "Tilapia a la plancha con camote y ensalada de espinaca, tomate y pepino.",
+    lines: [
+      { ingredientSlug: "tilapia", gramsPerBaseServing: 200 },
+      { ingredientSlug: "camote", gramsPerBaseServing: 150 },
+      { ingredientSlug: "espinaca", gramsPerBaseServing: 40 },
+      { ingredientSlug: "tomate", gramsPerBaseServing: 60 },
+      { ingredientSlug: "pepino", gramsPerBaseServing: 60 },
+      { ingredientSlug: "aceite_oliva", gramsPerBaseServing: 5 },
+      { ingredientSlug: "limon", gramsPerBaseServing: 15 },
+    ],
+  },
+  {
+    name: "Pollo con camote y brócoli",
+    mealType: "lunch",
+    description: "Pechuga a la plancha con camote, brócoli y un poco de palta.",
+    lines: [
+      { ingredientSlug: "pollo", gramsPerBaseServing: 180 },
+      { ingredientSlug: "camote", gramsPerBaseServing: 200 },
+      { ingredientSlug: "brocoli", gramsPerBaseServing: 150 },
+      { ingredientSlug: "palta", gramsPerBaseServing: 40 },
+      { ingredientSlug: "aceite_oliva", gramsPerBaseServing: 5 },
+    ],
+  },
+  {
+    name: "Yogurt griego con whey y plátano",
+    mealType: "snack",
+    description: "Snack alto en proteína: yogurt griego, whey, plátano y mantequilla de maní.",
+    lines: [
+      { ingredientSlug: "yogurt_griego", gramsPerBaseServing: 150 },
+      { ingredientSlug: "whey", gramsPerBaseServing: 30 },
+      { ingredientSlug: "platano", gramsPerBaseServing: 60 },
+      { ingredientSlug: "mantequilla_mani", gramsPerBaseServing: 15 },
     ],
   },
 ];

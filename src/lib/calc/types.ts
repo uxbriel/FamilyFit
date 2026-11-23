@@ -19,6 +19,8 @@ export interface MemberInput {
   sportFreqPerWeek: number;
   goal: Goal;
   activePhase: Phase;
+  /** % de grasa medido (balanza). Si existe, el BMR usa Katch-McArdle. */
+  bodyFatPct?: number | null;
 }
 
 /** Gramos y porcentaje de cada macronutriente. */
@@ -34,6 +36,8 @@ export interface Macros {
 /** Resultado completo del cálculo energético de un miembro. */
 export interface EnergyResult {
   bmr: number;
+  /** Fórmula usada para el BMR. */
+  bmrFormula: "mifflin" | "katch";
   activityFactor: number;
   tdee: number;
   /** Ajuste calórico aplicado por la fase, ej. -0.15 = déficit del 15%. */

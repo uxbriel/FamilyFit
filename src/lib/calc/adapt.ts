@@ -15,6 +15,7 @@ export function memberToInput(m: Member): MemberInput {
     sportFreqPerWeek: m.sport_freq_per_week,
     goal: m.goal,
     activePhase: m.active_phase,
+    bodyFatPct: m.body_fat_pct == null ? null : Number(m.body_fat_pct),
   };
 }
 

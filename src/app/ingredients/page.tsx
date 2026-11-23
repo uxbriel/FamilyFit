@@ -2,6 +2,7 @@ import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
 import { Disclaimer } from "@/components/Disclaimer";
 import { getIngredients } from "@/lib/data";
+import { addMissingStarterData } from "@/app/actions/seed";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +24,12 @@ export default async function IngredientsPage() {
         Precios e info nutricional editables. Ajústalos a tu mercado: la lista de compras
         se calcula con estos valores.
       </p>
+
+      <form action={addMissingStarterData} className="mb-3">
+        <button className="btn-secondary w-full text-xs">
+          + Agregar básicos fitness y suplementos que falten
+        </button>
+      </form>
 
       {ingredients.length === 0 ? (
         <p className="card text-center text-sm text-stone-500">
@@ -47,6 +54,11 @@ export default async function IngredientsPage() {
                   {Number(i.kcal_per_100g)} kcal · P{Number(i.protein_per_100g)} C
                   {Number(i.carbs_per_100g)} G{Number(i.fat_per_100g)} /100g
                 </p>
+                {i.serving_label && i.serving_grams && (
+                  <p className="text-xs text-stone-400">
+                    Porción: {i.serving_label} ({Number(i.serving_grams)} g)
+                  </p>
+                )}
               </div>
               <div className="text-right">
                 <p className="font-semibold text-stone-700">

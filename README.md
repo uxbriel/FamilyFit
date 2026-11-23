@@ -31,6 +31,17 @@ comida donde **toda la familia come lo mismo, en porciones distintas**.
   solo sus calorías y macros desde sus ingredientes.
 - **Plan semanal + lista de compras** consolidada con costo estimado y el
   desglose de **porciones por miembro** por comida.
+- **Composición corporal**: registra las mediciones de tu balanza (peso, % de
+  grasa, masa muscular, grasa visceral). Con % de grasa, el BMR pasa a
+  **Katch-McArdle** (usa tu masa magra) y la app te muestra cuánto músculo
+  ganar y cuánta grasa perder para llegar a tu meta.
+- **Rutina personalizada** por día de la semana (fuerza, cardio o descanso),
+  con plantillas de partida que luego editas.
+- **Diario de comidas**: registra alimentos (por gramos o porción: 1 scoop,
+  1 cda, 1 huevo), platos o comidas fuera de casa, y ve en tiempo real cuánto
+  te falta de calorías y proteína.
+- **Básicos fitness y suplementos** en la despensa (whey, creatina,
+  mantequilla de maní, tilapia, camote, yogurt griego…) con platos de ejemplo.
 
 Todos los cálculos y la lista de compras se **derivan de la base de datos
 editable**, nunca de valores fijos en el código.
@@ -72,6 +83,7 @@ npm install
 2. En **SQL Editor**, ejecuta en orden:
    - `supabase/migrations/0001_init.sql`
    - `supabase/migrations/0002_rls.sql`
+   - `supabase/migrations/0003_tracking.sql`
 3. (Opcional) En **Authentication → Providers → Email**, desactiva la
    confirmación por correo si quieres entrar de inmediato tras registrarte.
 
@@ -93,6 +105,12 @@ npm run dev
 
 Al crear tu familia (registro), la app siembra automáticamente los platos e
 ingredientes peruanos de ejemplo, listos para editar.
+
+### Si ya tenías la app funcionando
+
+Ejecuta solo `supabase/migrations/0003_tracking.sql` en el SQL Editor y, en la
+app, entra a **Despensa → “Agregar básicos fitness y suplementos que falten”**.
+No toca lo que ya editaste.
 
 ## Scripts
 

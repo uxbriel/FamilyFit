@@ -76,6 +76,41 @@ export function IngredientForm({ ingredient, action }: Props) {
         </div>
       </div>
 
+      <div className="card space-y-3">
+        <p className="text-sm font-semibold text-stone-700">Porción de referencia (opcional)</p>
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="label" htmlFor="serving_label">
+              Nombre
+            </label>
+            <input
+              id="serving_label"
+              name="serving_label"
+              className="input"
+              placeholder="1 scoop, 1 cda…"
+              defaultValue={ingredient?.serving_label ?? ""}
+            />
+          </div>
+          <div>
+            <label className="label" htmlFor="serving_grams">
+              Gramos
+            </label>
+            <input
+              id="serving_grams"
+              name="serving_grams"
+              type="number"
+              step="0.1"
+              min={0}
+              className="input"
+              defaultValue={ingredient?.serving_grams ?? undefined}
+            />
+          </div>
+        </div>
+        <p className="text-xs text-stone-400">
+          Sirve para registrar rápido en el diario (ej. 1 scoop de whey = 30 g).
+        </p>
+      </div>
+
       <button type="submit" className="btn-primary w-full">
         {ingredient ? "Guardar cambios" : "Agregar ingrediente"}
       </button>

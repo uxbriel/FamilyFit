@@ -1,13 +1,16 @@
 import "server-only";
 import { createClient } from "./supabase/server";
 import type {
+  BodyMeasurement,
   Dish,
+  FoodLog,
   DishIngredient,
   Family,
   Ingredient,
   MealPlan,
   MealPlanEntry,
   Member,
+  WorkoutDay,
 } from "./supabase/types";
 import { buildDishWithRecipe } from "./calc/adapt";
 import type { DishWithRecipe } from "./calc/nutrition";
@@ -94,4 +97,51 @@ export async function familyNeedsSeed(): Promise<boolean> {
     .from("ingredients")
     .select("*", { count: "exact", head: true });
   return (count ?? 0) === 0;
+}
+
+// --------------------------------------------------------------------
+// Seguimiento
+// --------------------------------------------------------------------
+
+export async function getMeasurements(memberId: string, limit = 30): Promise<BodyMeasurement[]> {
+  const supabase = createClient();
+  const { data } = await supabase
+    .from("body_measurements")
+    .select("*")
+    .eq("member_id", memberId)
+    .order("measured_on", { ascending: false })
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  return data ?? [];
+}
+
+export async function getWorkoutDays(memberId: string): Promise<WorkoutDay[]> {
+  const supabase = createClient();
+  const { data } = await supabase
+    .from("workout_days")
+    .select("*")
+    .eq("member_id", memberId)
+    .order("day_of_week");
+  return (data ?? []).map((d) => ({
+    ...d,
+    exercises: Array.isArray(d.exercises) ? d.exercises : [],
+  })) as WorkoutDay[];
+}
+
+export async function getFoodLogs(memberId: string, date: string): Promise<FoodLog[]> {
+  const supabase = createClient();
+  const { data } = await supabase
+    .from("food_logs")
+    .select("*")
+    .eq("member_id", memberId)
+    .eq("logged_on", date)
+    .order("created_at");
+  return data ?? [];
+}
+
+/** Registros de un día para toda la familia (para el resumen del inicio). */
+export async function getFamilyFoodLogs(date: string): Promise<FoodLog[]> {
+  const supabase = createClient();
+  const { data } = await supabase.from("food_logs").select("*").eq("logged_on", date);
+  return data ?? [];
 }

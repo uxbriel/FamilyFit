@@ -1,5 +1,5 @@
 // Etiquetas legibles en español para los enums del dominio.
-import type { Goal, MealType, NeatLevel, Phase, Sex } from "./supabase/types";
+import type { Goal, MealType, NeatLevel, Phase, Sex, WorkoutKind } from "./supabase/types";
 
 export const SEX_LABELS: Record<Sex, string> = {
   male: "Hombre",
@@ -67,3 +67,11 @@ export const DAY_LABELS = [
   "Sábado",
   "Domingo",
 ];
+
+export const WORKOUT_KIND_LABELS: Record<WorkoutKind, string> = {
+  strength: "Fuerza",
+  cardio: "Cardio",
+  rest: "Descanso",
+};
+
+export const MEAL_ORDER: MealType[] = ["breakfast", "lunch", "snack", "dinner"];

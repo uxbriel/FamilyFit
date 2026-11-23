@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { getFamily, getMembers, familyNeedsSeed } from "@/lib/data";
+import { getFamily, getMembers, familyNeedsSeed, getFamilyFoodLogs } from "@/lib/data";
+import { todayISO } from "@/lib/week";
 import { computeEnergy } from "@/lib/calc/energy";
 import { memberToInput } from "@/lib/calc/adapt";
 import { MacroBar } from "@/components/MacroBar";
@@ -15,10 +16,11 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function Dashboard() {
-  const [family, members, needsSeed] = await Promise.all([
+  const [family, members, needsSeed, todayLogs] = await Promise.all([
     getFamily(),
     getMembers(),
     familyNeedsSeed(),
+    getFamilyFoodLogs(todayISO()),
   ]);
 
   return (
@@ -96,6 +98,11 @@ export default async function Dashboard() {
                 <div className="mt-3">
                   <MacroBar macros={e.macros} />
                 </div>
+                <TodayLine
+                  logs={todayLogs.filter((l) => l.member_id === m.id)}
+                  kcalTarget={e.targetCalories}
+                  proteinTarget={e.macros.proteinG}
+                />
               </Link>
             );
           })}
@@ -107,6 +114,10 @@ export default async function Dashboard() {
       )}
 
       <div className="mt-6 grid grid-cols-2 gap-3">
+        <Link href="/log" className="card col-span-2 text-center">
+          <p className="text-2xl">📒</p>
+          <p className="mt-1 text-sm font-medium">Diario: registra lo que comes</p>
+        </Link>
         <Link href="/planner" className="card text-center">
           <p className="text-2xl">🍽️</p>
           <p className="mt-1 text-sm font-medium">Plan semanal y compras</p>
@@ -117,5 +128,27 @@ export default async function Dashboard() {
         </Link>
       </div>
     </main>
+  );
+}
+
+function TodayLine({
+  logs,
+  kcalTarget,
+  proteinTarget,
+}: {
+  logs: { kcal: number; protein_g: number }[];
+  kcalTarget: number;
+  proteinTarget: number;
+}) {
+  if (logs.length === 0) {
+    return <p className="mt-2 text-xs text-stone-400">Hoy: nada registrado todavía</p>;
+  }
+  const kcal = Math.round(logs.reduce((s, l) => s + Number(l.kcal), 0));
+  const protein = Math.round(logs.reduce((s, l) => s + Number(l.protein_g), 0));
+  return (
+    <p className="mt-2 text-xs text-stone-600">
+      Hoy: <span className="font-semibold">{kcal}</span> / {kcalTarget} kcal · proteína{" "}
+      <span className="font-semibold">{protein}</span> / {proteinTarget} g
+    </p>
   );
 }
